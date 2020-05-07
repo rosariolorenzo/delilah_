@@ -2,7 +2,7 @@
 node_modules
 
 #ignora los json
-*.json
+package-lock.json
 
 #ignorar todos los .txt
 *.txt
