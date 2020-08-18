@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 
  mongoose.connect('mongodb://localhost:27017/database');
 
-//create schema for Users 
 const Schema = mongoose.Schema
 const usersSchema =  new Schema({ 
     username: String,
