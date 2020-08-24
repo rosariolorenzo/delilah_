@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/database');
+mongoose.connect('mongodb://localhost:27017/database',{useNewUrlParser: true, useUnifiedTopology: true});
 
 const ProductSchema = new mongoose.Schema({
-    name: {type: String, required: true, max: 50},
-    price: {type: Number, required: true},
-    img: {type: String, required: true}
+    name: {type: String},
+    price: {type: Number},
+    img: {type: String}
 });
 
 const favoriteProductsSchema =  new mongoose.Schema({ 

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
  const rolesModel = require('./rolesModel');
 
- mongoose.connect('mongodb://localhost:27017/database');
+ mongoose.connect('mongodb://localhost:27017/database',{useNewUrlParser: true, useUnifiedTopology: true});
 
 const Schema = mongoose.Schema
 const usersSchema =  new Schema({ 

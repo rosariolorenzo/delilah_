@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 const userModel = require('./usersModel'); 
 const productModel = require('./productsModel');
-const paymentModel = require('./paymentModel'); 
+const paymentModel = require('./paymentsModel'); 
 
-mongoose.connect('mongodb://localhost:27017/database');
+mongoose.connect('mongodb://localhost:27017/database',{useNewUrlParser: true, useUnifiedTopology: true});
 
 const orderSchema =  new mongoose.Schema({ 
     id_user: {

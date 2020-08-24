@@ -60,7 +60,12 @@ async function getProductDescription( id ) {
     return productName;
 }
 
-/*----- Favorite product -----*/
+
+
+
+
+
+//favorite products
 
 async function clearFavoriteProduct( id ) {
     let clearFavProduct = await productsModel.FavoriteProducts.deleteOne( { _id: id } )
@@ -114,7 +119,7 @@ async function insertFavoriteProduct( productId ){
     return saveFavoriteProduct;
 }
 
-//function that returns array of favorites products
+// returns array of favorites products
 async function getFavoriteProducts() {
     let favoriteProducts = await productsModel.FavoriteProducts.find();
 
