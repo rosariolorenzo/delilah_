@@ -1,72 +1,102 @@
 const server = require ('express');
 const router = server.Router();
+const prodController = require('../controllers/products');
+const prodMiddleware = require('../middlewares/products');
+const rolesMiddleware = require('../middlewares/roles');
 
-//Arreglo productos y favoritos
-let products=[
-    {
-        id:1,
-        nombre:'Milanesa con papas ',
-        precio: 400,
-        foto:'asass'
-    },
-    {
-        id:2,
-        nombre:'Sorrentinos con salsa mixta',
-        precio: 350,
-        foto:'assaad'
-    },
-    {
-        id:3,
-        nombre:'Pizza barrigona',
-        precio: 450,
-        foto:'assaaddd'
+router.post('/favorite', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, prodMiddleware.validatePostFavorite, async ( req, res ) => {
+    let clearResult = await prodController.clearFavoriteDocuments();
+  
+    if( clearResult.ok === 1 ) {
+        
+        let existProducts = await prodController.validateProduct( req.body.products );
+            if( existProducts ) {
+                req.body.products.forEach( async (productId) => {
+                    await prodController.insertFavoriteProduct( productId );
+                 });
+                res.statusCode = 200;
+                return res.json('producto favorito agregado'); 
+            } 
+        res.statusCode = 400;
+        return res.json('el producto favorito ya existe'); 
     }
-]
+});
 
-let favoritos=[]
+router.get('/favorite', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, async ( req, res ) => {
+    let favoriteProducts = await prodController.getFavoriteProducts();
 
- function validarId(req, res, next){
-    products.forEach((producto)=>{
-    if(producto.id == req.params.id){
-        next()
-    }else{
-        res.status(404).json('Producto no exite')
-    }    
-    })
-    
-}
+    let newFavorites = [];
+    for( let i = 0; i < favoriteProducts.length; i ++ ){
+        let favoriteDesc = await prodController.getProductDescription( favoriteProducts[i].product );
 
-function validarProducto(req, res, next){
-    const { id, nombre, precio, foto } = req.body;
-    if(!id||!nombre||!precio||!foto){
-        res.status(400).json('Falta informacion')
-    }else{
-        next();
+        newFavorites.push({
+            _id: favoriteProducts[i]._id,
+            favorites_description: favoriteDesc
+            })
     }
+ 
+        res.statusCode = 200;
+        res.json( newFavorites ); 
+});
+
+router.delete('/favorite/:id', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, async( req, res ) => {
+    const favoriteId = req.params.id;
+
+    let deleteFavoriteId = await prodController.clearFavoriteProduct( favoriteId );
+
+    if( deleteFavoriteId ) {
+        res.statusCode = 200;
+        res.json('producto favorito eliminado');
+    }
+})
+
+
+router.get('/product', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, async ( req, res ) => {
+    let products = await prodController.getProducts();
+
+    res.statusCode = 200;
+    res.json( products );
+});
+
+router.post('/product', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, prodMiddleware.validatePostProduct, async ( req, res ) => {
+    let saveProduct = await prodController.insertProduct( req.body );
+
+    if( saveProduct ) {
+        res.statusCode = 200;
+        res.json('producto agregado');
+    }
+});
+
+router.delete('/product/:id', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, async( req, res ) => {
+    const productId = req.params.id;
+
+    let deleteProductId = await prodController.deleteProduct( productId );
+
+    if( deleteProductId ) {
+        res.statusCode = 200;
+        res.json('producto eliminado');
+    }
+})
+
+router.patch('/product/:id', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, prodMiddleware.validateUpdateProduct, async ( req, res ) => {
+    const productId = req.params.id;
+    const newProperties = req.body;
+   
+    let updateProduct = await prodController.updateProduct( productId, newProperties );
     
-}
-
-router.get('/',(req,res)=>{
-    res.status(200).json(products)
+    if( updateProduct.ok === 1 ){
+        res.statusCode = 200;
+        res.json('producto editado');
+    }
 })
 
-router.get('/productos/:id', validarId , (req,res)=>{
+router.get('/product/:id', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, async ( req, res ) => {
     const productId = req.params.id;
-    res.status(200).json(products[productId]);
-})
+    let product = await prodController.getProductById( productId )
+    .then( result => result );
 
-router.get('/favoritos', (req,res)=>{
-    res.status(200).json(favoritos);
-})
-
-router.post('/', validarProducto, (req,res)=>{
-    products.push(req.body);
-    res.status(200).json('producto agregado');
-})
-
-router.post('/favoritos',validarId , (req,res)=>{
-    const productId = req.params.id;
-    favoritos.push(products[productId]);
-    res.status(200).json('Producto agregado a Favoritos');
-})
+    res.statusCode = 200;
+    return res.json(product);
+    
+});
 module.exports=router;

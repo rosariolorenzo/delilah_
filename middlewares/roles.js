@@ -6,9 +6,6 @@ const jwt = require('jsonwebtoken');
 const roleUserDescription = 'user';
 const roleAdminDescription = 'admin';
 
-
-
-
 function validateRoleProperties(  req, res, next ) {
     const { description } = req.body;
 
