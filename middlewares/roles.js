@@ -4,7 +4,7 @@ const jwtFirma = 'mypassword';
 const jwt = require('jsonwebtoken');
 
 const roleUserDescription = 'user';
-const roleAdminDescription = 'administrador';
+const roleAdminDescription = 'admin';
 
 
 
