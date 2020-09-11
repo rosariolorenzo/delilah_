@@ -1,10 +1,10 @@
 const server = require ('express');
-const router = server.Router();
+const routerProducts = server.Router();
 const prodController = require('../controllers/products');
 const prodMiddleware = require('../middlewares/products');
 const rolesMiddleware = require('../middlewares/roles');
 
-router.post('/favorite', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, prodMiddleware.validatePostFavorite, async ( req, res ) => {
+routerProducts.post('/favorite', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, prodMiddleware.validatePostFavorite, async ( req, res ) => {
     let clearResult = await prodController.clearFavoriteDocuments();
   
     if( clearResult.ok === 1 ) {
@@ -22,7 +22,7 @@ router.post('/favorite', rolesMiddleware.validateToken, rolesMiddleware.validate
     }
 });
 
-router.get('/favorite', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, async ( req, res ) => {
+routerProducts.get('/favorite', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, async ( req, res ) => {
     let favoriteProducts = await prodController.getFavoriteProducts();
 
     let newFavorites = [];
@@ -39,7 +39,7 @@ router.get('/favorite', rolesMiddleware.validateToken, rolesMiddleware.validateR
         res.json( newFavorites ); 
 });
 
-router.delete('/favorite/:id', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, async( req, res ) => {
+routerProducts.delete('/favorite/:id', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, async( req, res ) => {
     const favoriteId = req.params.id;
 
     let deleteFavoriteId = await prodController.clearFavoriteProduct( favoriteId );
@@ -51,14 +51,14 @@ router.delete('/favorite/:id', rolesMiddleware.validateToken, rolesMiddleware.va
 })
 
 
-router.get('/product', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, async ( req, res ) => {
+routerProducts.get('/product', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, async ( req, res ) => {
     let products = await prodController.getProducts();
 
     res.statusCode = 200;
     res.json( products );
 });
 
-router.post('/product', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, prodMiddleware.validatePostProduct, async ( req, res ) => {
+routerProducts.post('/product', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, prodMiddleware.validatePostProduct, async ( req, res ) => {
     let saveProduct = await prodController.insertProduct( req.body );
 
     if( saveProduct ) {
@@ -67,7 +67,7 @@ router.post('/product', rolesMiddleware.validateToken, rolesMiddleware.validateR
     }
 });
 
-router.delete('/product/:id', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, async( req, res ) => {
+routerProducts.delete('/product/:id', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, async( req, res ) => {
     const productId = req.params.id;
 
     let deleteProductId = await prodController.deleteProduct( productId );
@@ -78,7 +78,7 @@ router.delete('/product/:id', rolesMiddleware.validateToken, rolesMiddleware.val
     }
 })
 
-router.patch('/product/:id', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, prodMiddleware.validateUpdateProduct, async ( req, res ) => {
+routerProducts.patch('/product/:id', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, prodMiddleware.validateUpdateProduct, async ( req, res ) => {
     const productId = req.params.id;
     const newProperties = req.body;
    
@@ -90,7 +90,7 @@ router.patch('/product/:id', rolesMiddleware.validateToken, rolesMiddleware.vali
     }
 })
 
-router.get('/product/:id', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, async ( req, res ) => {
+routerProducts.get('/product/:id', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, async ( req, res ) => {
     const productId = req.params.id;
     let product = await prodController.getProductById( productId )
     .then( result => result );
@@ -99,4 +99,4 @@ router.get('/product/:id', rolesMiddleware.validateToken, rolesMiddleware.valida
     return res.json(product);
     
 });
-module.exports=router;
+module.exports=routerProducts;

@@ -1,10 +1,10 @@
 const server = require('express');
-const router = server.Router();
+const routerPayments = server.Router();
 const paymentController = require('../controllers/payments');
 const paymentMiddleware = require ('../middlewares/payments');
 const rolesMiddleware = require('../middlewares/roles');
 
-router.post('/paymentmethod', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, paymentMiddleware.validatePaymentProps, async ( req, res ) => {
+routerPayments.post('/paymentmethod', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, paymentMiddleware.validatePaymentProps, async ( req, res ) => {
     let savePayment = await paymentController.insertPaymentMethod( req.body );
 
     if( savePayment ) {
@@ -14,14 +14,14 @@ router.post('/paymentmethod', rolesMiddleware.validateToken, rolesMiddleware.val
      
 });
 
-router.get('/paymentmethod', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, async ( req, res ) => {
+routerPayments.get('/paymentmethod', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, async ( req, res ) => {
     let paymentMethods = await paymentController.getPaymentMethods();
 
     res.statusCode = 200;
     res.json( paymentMethods );
 });
 
-router.get('/payment/:id', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin,  async ( req, res ) => {
+routerPayments.get('/payment/:id', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin,  async ( req, res ) => {
     const paymentId = req.params.id;
     let payment = await paymentController.getPaymentMethodBy( paymentId )
     .then( result => result );
@@ -31,7 +31,7 @@ router.get('/payment/:id', rolesMiddleware.validateToken, rolesMiddleware.valida
     
 });
 
-router.delete('/payment/:id', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin,  async( req, res ) => {
+routerPayments.delete('/payment/:id', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin,  async( req, res ) => {
     const paymentId = req.params.id;
 
     let deletePayment = await paymentController.deletePaymentMethod( paymentId );
@@ -42,11 +42,11 @@ router.delete('/payment/:id', rolesMiddleware.validateToken, rolesMiddleware.val
     }
 })
 
-router.patch('/payment/:id', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, paymentMiddleware.validatePaymentProps, async ( req, res ) => {
+routerPayments.patch('/payment/:id', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, paymentMiddleware.validatePaymentProps, async ( req, res ) => {
     const paymentId = req.params.id;
 
     let updatePayment = await paymentController.updatePaymentMethod( paymentId, req.body.description );
-    //Analyze if update was made sucessfully
+    
     if( updatePayment.ok === 1 ){
         res.statusCode = 200;
         res.json('metodo de pago editado');
@@ -54,4 +54,4 @@ router.patch('/payment/:id', rolesMiddleware.validateToken, rolesMiddleware.vali
 })
 
 
-module.exports = router;
+module.exports = routerPayments;
