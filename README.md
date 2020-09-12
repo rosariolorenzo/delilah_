@@ -71,3 +71,63 @@ Este archivo crea las colecciones en la base de datos.
  
  
  Se comenzará a ejecutar en el puerto 3000
+ 
+ 
+ 
+ ## Usuarios
+ 
+  Crear un nuevo usuario
+  ``
+   POST /register
+  ``
+  
+  
+  Formato para la creacion de un nuevo usuario:
+  
+  ```
+  {
+      username: String,
+    
+      name: String,
+    
+      email: String,
+    
+     tel: String,
+    
+     address: String,
+    
+     password: String
+     
+  }
+  ```
+  
+  Respuesta esperada 
+  ```
+    Usuario agregado
+  ```
+  
+  En el caso de que tanto el email como el name ya existan se mostrara en pantalla
+  
+  ```
+   Usuario ya existe
+ ```
+ 
+ Inicio de sesión con un usuario existente
+ 
+ ```
+  POST / login
+```
+
+En el caso de que se acceda a la sesión se retorna un token de usuario
+
+En caso contrario se retornará 
+
+```
+ Usuario no encontrado 
+```
+
+Actualizar usuario existente 
+
+```
+PATCH user/:id
+
