@@ -1,4 +1,4 @@
-# delilah_proyect_acamica
+# delilah_
 
 Delilah es un proyecto que permite crear, editar, eliminar y obtener productos e inventarios en el contexto de una empresa de entrega de alimentos.
 
