@@ -29,7 +29,7 @@ cd a ``` C:\Program Files\MongoDB\Server\4.4\bin>```
  
   De forma predeterminada, el servidor Mongo DB se iniciará en el puerto 27017
 
-4) Copiar el path del archivo "initBD" que se encuentra en el repositorio y ejecutarlo en otra consola
+4) Copiar el path del archivo "initDB" que se encuentra en el repositorio y ejecutarlo en otra consola
 
 
      ```bash
