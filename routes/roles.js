@@ -2,9 +2,9 @@ const server = require ('express');
 const routerRoles = server.Router();
 const roleController = require('../controllers/roles');
 const rolesMiddleware = require('../middlewares/roles');
-const userMiddleware = require ('../middlewares/users');
 
-routerRoles.post('/role',rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, userMiddleware.validateRoleProperties, async ( req, res ) => {
+
+routerRoles.post('/role',rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, rolesMiddleware.validateRoleProperties, async ( req, res ) => {
     let saveRole = await roleController.insertRole( req.body );
 
     if( saveRole ) {
@@ -40,7 +40,7 @@ routerRoles.get('/role/:id', rolesMiddleware.validateToken, rolesMiddleware.vali
     
 });
 
-routerRoles.patch('/role/:id', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, userMiddleware.validateRoleProperties, async ( req, res ) => {
+routerRoles.patch('/role/:id', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, rolesMiddleware.validateRoleProperties, async ( req, res ) => {
     const roleId = req.params.id;
     const newRole = req.body;
    

@@ -22,7 +22,7 @@ routerUser.post( '/login', userMiddleware.loginValidation, async ( req, res ) =>
     } else {
         res.statusCode = 400;
 
-        return res.json("user not found");
+        return res.json("usuario no encontrado");
     } 
 });
 

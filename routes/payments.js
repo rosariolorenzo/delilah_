@@ -4,18 +4,19 @@ const paymentController = require('../controllers/payments');
 const paymentMiddleware = require ('../middlewares/payments');
 const rolesMiddleware = require('../middlewares/roles');
 
-routerPayments.post('/paymentmethod', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, paymentMiddleware.validatePaymentProps, async ( req, res ) => {
+
+routerPayments.post('/paymentmethod', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, paymentMiddleware.validatePayment, async ( req, res ) => {
     let savePayment = await paymentController.insertPaymentMethod( req.body );
 
     if( savePayment ) {
         res.statusCode = 200;  
-        return res.json('metodo de pago agregado');
+        return res.json("metodo de pago agregado");
     }
      
 });
 
 routerPayments.get('/paymentmethod', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, async ( req, res ) => {
-    let paymentMethods = await paymentController.getPaymentMethods();
+    let paymentMethods = await paymentController.getPaymentMethods(req.body);
 
     res.statusCode = 200;
     res.json( paymentMethods );
@@ -42,7 +43,7 @@ routerPayments.delete('/payment/:id', rolesMiddleware.validateToken, rolesMiddle
     }
 })
 
-routerPayments.patch('/payment/:id', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, paymentMiddleware.validatePaymentProps, async ( req, res ) => {
+routerPayments.patch('/payment/:id', rolesMiddleware.validateToken, rolesMiddleware.validateRoleAdmin, paymentMiddleware.validatePayment, async ( req, res ) => {
     const paymentId = req.params.id;
 
     let updatePayment = await paymentController.updatePaymentMethod( paymentId, req.body.description );
