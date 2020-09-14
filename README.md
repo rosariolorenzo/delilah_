@@ -312,7 +312,8 @@ Formato de orden
 Respuesta esperada
 
 
-```Orden agregada
+```
+ Orden agregada
 ```
 
 
@@ -322,7 +323,8 @@ Respuesta esperada
 Usuario con rol de administrador tiene acceso a todos los pedidos.
 
 
-```GET /order
+```
+ GET /order
 ```
 
 
